@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Allemand-Français</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .quiz-step { display: none; border: 1px solid #ddd; padding: 15px; margin: 10px auto; width: 50%; border-radius: 8px; }
+        button { padding: 10px 15px; margin-top: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Apprendre l'Allemand avec un Quiz</h1>
+    
+    <!-- Étape 1: Traduire de l'allemand au français -->
+    <div class="quiz-step" id="step1">
+        <p><strong>Allemand :</strong> Guten Tag! Wie geht es Ihnen?</p>
+        <input type="text" id="answer1" placeholder="Traduire en français">
+        <button onclick="checkAnswer(1, 'Bonjour ! Comment allez-vous ?')">Valider</button>
+    </div>
+    
+    <!-- Étape 2: Traduire du français à l'allemand -->
+    <div class="quiz-step" id="step2">
+        <p><strong>Français :</strong> Bonjour ! Comment allez-vous ?</p>
+        <input type="text" id="answer2" placeholder="Traduire en allemand">
+        <button onclick="checkAnswer(2, 'Guten Tag! Wie geht es Ihnen?')">Valider</button>
+    </div>
+    
+    <!-- Étape 3: Écouter et traduire l'audio -->
+    <div class="quiz-step" id="step3">
+        <button onclick="playAudio('dialogue1.mp3')">Écouter 🎧</button>
+        <input type="text" id="answer3" placeholder="Traduire en français">
+        <button onclick="checkAnswer(3, 'Bonjour ! Comment allez-vous ?')">Valider</button>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        document.getElementById("step1").style.display = "block";
+        
+        function checkAnswer(step, correctAnswer) {
+            let userAnswer = document.getElementById("answer" + step).value.trim();
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                alert("Bonne réponse !");
+                document.getElementById("step" + step).style.display = "none";
+                currentStep++;
+                if (currentStep <= 3) {
+                    document.getElementById("step" + currentStep).style.display = "block";
+                } else {
+                    alert("Félicitations, vous avez terminé le quiz !");
+                }
+            } else {
+                alert("Mauvaise réponse, essayez encore.");
+            }
+        }
+        
+        function playAudio(file) {
+            new Audio(file).play();
+        }
+    </script>
+</body>
+</html>
