@@ -8,11 +8,22 @@
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         .quiz-step { display: none; border: 1px solid #ddd; padding: 15px; margin: 10px auto; width: 50%; border-radius: 8px; }
         button { padding: 10px 15px; margin-top: 10px; cursor: pointer; }
+        .score, .timer { font-size: 20px; font-weight: bold; margin: 10px; }
     </style>
 </head>
 <body>
     <h1>Apprendre l'Allemand avec un Quiz</h1>
-    
+
+    <!-- Affichage du score -->
+    <div class="score">
+        Score: <span id="score">0</span>
+    </div>
+
+    <!-- Affichage du minuteur -->
+    <div class="timer">
+        Temps restant: <span id="timer">120</span> secondes
+    </div>
+
     <!-- Étape 1: Traduire de l'allemand au français -->
     <div class="quiz-step" id="step1">
         <p><strong>Allemand :</strong> Guten Tag! Wie geht es Ihnen?</p>
@@ -33,15 +44,28 @@
         <input type="text" id="answer3" placeholder="Traduire en français">
         <button onclick="checkAnswer(3, 'Bonjour ! Comment allez-vous ?')">Valider</button>
     </div>
-    
+
     <script>
         let currentStep = 1;
-        document.getElementById("step1").style.display = "block";
+        let score = 0;
+        let timer = 120; // Timer en secondes
+        let timerInterval;
         
+        document.getElementById("step1").style.display = "block";
+
+        // Fonction pour nettoyer la réponse en supprimant les espaces et la ponctuation
+        function cleanAnswer(answer) {
+            return answer.toLowerCase().replace(/[^a-zA-Z0-9]/g, '').trim();
+        }
+
+        // Fonction pour vérifier les réponses
         function checkAnswer(step, correctAnswer) {
             let userAnswer = document.getElementById("answer" + step).value.trim();
-            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+
+            if (cleanAnswer(userAnswer) === cleanAnswer(correctAnswer)) {
                 alert("Bonne réponse !");
+                score++; // Incrémente le score
+                document.getElementById("score").innerText = score; // Met à jour le score
                 document.getElementById("step" + step).style.display = "none";
                 currentStep++;
                 if (currentStep <= 3) {
@@ -53,10 +77,26 @@
                 alert("Mauvaise réponse, essayez encore.");
             }
         }
-        
+
+        // Fonction pour jouer l'audio
         function playAudio(file) {
             new Audio(file).play();
         }
+
+        // Fonction pour mettre en place le minuteur
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                timer--;
+                document.getElementById("timer").innerText = timer; // Met à jour le minuteur
+                if (timer <= 0) {
+                    clearInterval(timerInterval); // Arrêter le minuteur quand il arrive à 0
+                    alert("Le temps est écoulé ! Votre score est : " + score);
+                }
+            }, 1000); // Le minuteur se met à jour chaque seconde
+        }
+
+        // Démarrer le minuteur quand le quiz commence
+        startTimer();
     </script>
 </body>
 </html>
